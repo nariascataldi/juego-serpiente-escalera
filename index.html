@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
   <!-- ═══════════════════════════════════════ -->
   <!-- START SCREEN                            -->
   <!-- ═══════════════════════════════════════ -->
@@ -63,8 +64,8 @@
           </div>
         </div>
 
-        <div class="topic-selector">
-          <h3>📚 Tema del Cuestionario</h3>
+        <fieldset class="topic-selector">
+          <legend>📚 Tema del Cuestionario</legend>
           <div class="topic-options">
             <label class="topic-option">
               <input type="radio" name="topic" value="PREGUNTAS_CIENCIAS_NATURALES" checked>
@@ -79,10 +80,10 @@
               <span class="topic-badge">📖 Poesía</span>
             </label>
           </div>
-        </div>
+        </fieldset>
 
-        <div class="difficulty-selector">
-          <h3>📊 Dificultad</h3>
+        <fieldset class="difficulty-selector">
+          <legend>📊 Dificultad</legend>
           <div class="difficulty-options">
             <label class="diff-option">
               <input type="radio" name="difficulty" value="easy">
@@ -97,10 +98,10 @@
               <span class="diff-badge hard">🔴 Avanzado</span>
             </label>
           </div>
-        </div>
+        </fieldset>
 
-        <div class="wrong-answer-rule">
-          <h3>❌ Si responde mal...</h3>
+        <fieldset class="wrong-answer-rule">
+          <legend>❌ Si responde mal...</legend>
           <div class="rule-options">
             <label class="rule-option">
               <input type="radio" name="wrong-rule" value="stay" checked>
@@ -115,7 +116,7 @@
               <span>Pierde turno ⏭️</span>
             </label>
           </div>
-        </div>
+        </fieldset>
 
         <button class="btn-start" id="btn-start">
           🎮 ¡Comenzar Juego!
@@ -129,16 +130,17 @@
   <!-- ═══════════════════════════════════════ -->
   <div id="game-screen" class="screen">
     <header class="game-header">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Alternar panel de jugadores">👥</button>
       <h1 class="header-title">🎲 Serpientes & Escaleras</h1>
       <div class="header-actions">
-        <button class="btn-icon" id="btn-rules" title="Ver reglas">📜</button>
-        <button class="btn-icon" id="btn-restart" title="Reiniciar">🔄</button>
+        <button class="btn-icon" id="btn-rules" title="Ver reglas" aria-label="Ver reglas del juego">📜</button>
+        <button class="btn-icon" id="btn-restart" title="Reiniciar" aria-label="Reiniciar juego">🔄</button>
       </div>
     </header>
 
-    <div class="game-layout">
+    <main id="main-content" class="game-layout">
       <!-- SIDEBAR: Player info -->
-      <aside class="sidebar">
+      <aside class="sidebar" aria-label="Información de jugadores">
         <div class="turn-indicator glass-card">
           <h3>🎯 Turno de:</h3>
           <div class="current-player-display" id="current-player-display">
@@ -163,16 +165,16 @@
       </aside>
 
       <!-- BOARD -->
-      <main class="board-area">
+      <div class="board-area">
         <div class="board-container">
           <div class="board" id="board"></div>
           <!-- SVG layer for snakes and ladders -->
           <svg class="board-overlay" id="board-overlay"></svg>
         </div>
-      </main>
+      </div>
 
       <!-- DICE & ACTIONS -->
-      <aside class="actions-panel">
+      <aside class="actions-panel" aria-label="Panel de control">
         <div class="dice-area glass-card">
           <div class="dice" id="dice">
             <div class="dice-face" id="dice-face">🎲</div>
@@ -184,12 +186,12 @@
 
         <div class="game-log glass-card">
           <h3>📝 Registro</h3>
-          <div class="log-entries" id="log-entries">
+          <div class="log-entries" id="log-entries" aria-live="polite">
             <div class="log-entry">🎮 ¡Juego iniciado!</div>
           </div>
         </div>
       </aside>
-    </div>
+    </main>
   </div>
 
   <!-- ═══════════════════════════════════════ -->

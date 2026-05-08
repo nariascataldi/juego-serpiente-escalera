@@ -95,6 +95,23 @@ class SnakesAndLaddersGame {
   }
 
   setupGameScreen() {
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarOverlay = document.createElement('div');
+    sidebarOverlay.className = 'sidebar-overlay';
+    document.body.appendChild(sidebarOverlay);
+
+    const toggleSidebar = () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('active');
+    };
+
+    sidebarToggle?.addEventListener('click', toggleSidebar);
+    sidebarOverlay?.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    });
+
     document.getElementById('btn-roll').addEventListener('click', () => this.rollDice());
     document.getElementById('btn-correct').addEventListener('click', () => this.answerQuestion(true));
     document.getElementById('btn-incorrect').addEventListener('click', () => this.answerQuestion(false));
@@ -767,9 +784,18 @@ class SnakesAndLaddersGame {
   toggleModal(id, show) {
     const modal = document.getElementById(id);
     if (show) {
+      this._previousFocus = document.activeElement;
       modal.classList.add('active');
+      const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable) {
+        focusable.focus();
+      }
     } else {
       modal.classList.remove('active');
+      if (this._previousFocus) {
+        this._previousFocus.focus();
+        this._previousFocus = null;
+      }
     }
   }
 
