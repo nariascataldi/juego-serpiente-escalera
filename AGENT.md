@@ -109,6 +109,15 @@ Este documento define la configuración y responsabilidades de los agentes espec
 
 ## Configuración del Repositorio
 - **Rama de trabajo**: `dev`
-- **Rama principal**: `juego`
+- **Rama principal**: `master`
+- **Rama backup**: `juego` - ⚠️ NO ALTERAR - Mantener como backup del código original
 - **Commits en**: Español
 - **Prefijo de commits**: `[MEJORA]` para mejoras, `[FIX]` para correcciones
+
+## ⚠️ Protección de Rama juego
+La rama `juego` debe mantenerse intacta como backup del código original del proyecto. 
+**Reglas:**
+- NO hacer merge desde otras ramas hacia `juego`
+- NO hacer push forzado a `juego`
+- NO modificar archivos en `juego`
+- Usar `juego` solo como referencia o rollback si es necesario
