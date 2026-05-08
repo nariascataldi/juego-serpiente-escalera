@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Juego de Serpientes y Escaleras educativo - Aprende poesía mientras juegas. Una versión interactiva para aprendizaje activo.">
+  <title>🎲 Serpientes y Escaleras - Aprendiendo Poesía</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ═══════════════════════════════════════ -->
+  <!-- START SCREEN                            -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="start-screen" class="screen active">
+    <div class="start-container">
+      <div class="start-hero">
+        <div class="floating-emoji emoji-1">📚</div>
+        <div class="floating-emoji emoji-2">🎲</div>
+        <div class="floating-emoji emoji-3">✨</div>
+        <div class="floating-emoji emoji-4">🐍</div>
+        <div class="floating-emoji emoji-5">🪜</div>
+        <h1 class="game-title">
+          <span class="title-line-1">Serpientes</span>
+          <span class="title-amp">&</span>
+          <span class="title-line-2">Escaleras</span>
+        </h1>
+        <p class="game-subtitle">🧠 Edición Aprendizaje Multitemático</p>
+      </div>
+
+      <div class="start-form glass-card">
+        <h2>👨‍👧‍👦 ¿Quién juega?</h2>
+        <div class="players-setup">
+          <div class="player-input" id="player1-setup">
+            <span class="player-dot" style="--dot-color: var(--player1)"></span>
+            <input type="text" id="player1-name" placeholder="Jugador 1" maxlength="15" value="">
+          </div>
+          <button class="btn-add-player" id="btn-add-player2" title="Agregar jugador 2">
+            <span>+ Agregar jugador</span>
+          </button>
+          <div class="player-input hidden" id="player2-setup">
+            <span class="player-dot" style="--dot-color: var(--player2)"></span>
+            <input type="text" id="player2-name" placeholder="Jugador 2" maxlength="15" value="">
+            <button class="btn-remove-player" title="Quitar jugador">✕</button>
+          </div>
+          <button class="btn-add-player hidden" id="btn-add-player3" title="Agregar jugador 3">
+            <span>+ Agregar jugador</span>
+          </button>
+          <div class="player-input hidden" id="player3-setup">
+            <span class="player-dot" style="--dot-color: var(--player3)"></span>
+            <input type="text" id="player3-name" placeholder="Jugador 3" maxlength="15" value="">
+            <button class="btn-remove-player" title="Quitar jugador">✕</button>
+          </div>
+          <button class="btn-add-player hidden" id="btn-add-player4" title="Agregar jugador 4">
+            <span>+ Agregar jugador</span>
+          </button>
+          <div class="player-input hidden" id="player4-setup">
+            <span class="player-dot" style="--dot-color: var(--player4)"></span>
+            <input type="text" id="player4-name" placeholder="Jugador 4" maxlength="15" value="">
+            <button class="btn-remove-player" title="Quitar jugador">✕</button>
+          </div>
+        </div>
+
+        <div class="topic-selector">
+          <h3>📚 Tema del Cuestionario</h3>
+          <div class="topic-options">
+            <label class="topic-option">
+              <input type="radio" name="topic" value="PREGUNTAS_CIENCIAS_NATURALES" checked>
+              <span class="topic-badge">🌿 Cs. Naturales</span>
+            </label>
+            <label class="topic-option">
+              <input type="radio" name="topic" value="PREGUNTAS_CIENCIAS_SOCIALES">
+              <span class="topic-badge">🏛️ Cs. Sociales</span>
+            </label>
+            <label class="topic-option">
+              <input type="radio" name="topic" value="PREGUNTAS_POESIA">
+              <span class="topic-badge">📖 Poesía</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="difficulty-selector">
+          <h3>📊 Dificultad</h3>
+          <div class="difficulty-options">
+            <label class="diff-option">
+              <input type="radio" name="difficulty" value="easy">
+              <span class="diff-badge easy">🟢 Básico</span>
+            </label>
+            <label class="diff-option">
+              <input type="radio" name="difficulty" value="medium" checked>
+              <span class="diff-badge medium">🟡 Medio</span>
+            </label>
+            <label class="diff-option">
+              <input type="radio" name="difficulty" value="hard">
+              <span class="diff-badge hard">🔴 Avanzado</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="wrong-answer-rule">
+          <h3>❌ Si responde mal...</h3>
+          <div class="rule-options">
+            <label class="rule-option">
+              <input type="radio" name="wrong-rule" value="stay" checked>
+              <span>Se queda 🛑</span>
+            </label>
+            <label class="rule-option">
+              <input type="radio" name="wrong-rule" value="back">
+              <span>Retrocede 🔙</span>
+            </label>
+            <label class="rule-option">
+              <input type="radio" name="wrong-rule" value="skip">
+              <span>Pierde turno ⏭️</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-start" id="btn-start">
+          🎮 ¡Comenzar Juego!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- GAME SCREEN                             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="game-screen" class="screen">
+    <header class="game-header">
+      <h1 class="header-title">🎲 Serpientes & Escaleras</h1>
+      <div class="header-actions">
+        <button class="btn-icon" id="btn-rules" title="Ver reglas">📜</button>
+        <button class="btn-icon" id="btn-restart" title="Reiniciar">🔄</button>
+      </div>
+    </header>
+
+    <div class="game-layout">
+      <!-- SIDEBAR: Player info -->
+      <aside class="sidebar">
+        <div class="turn-indicator glass-card">
+          <h3>🎯 Turno de:</h3>
+          <div class="current-player-display" id="current-player-display">
+            <span class="current-player-name" id="current-player-name">-</span>
+          </div>
+        </div>
+
+        <div class="players-panel glass-card">
+          <h3>👥 Jugadores</h3>
+          <div id="players-list" class="players-list"></div>
+        </div>
+
+        <div class="legend glass-card">
+          <h3>📋 Leyenda</h3>
+          <div class="legend-items">
+            <div class="legend-item"><span class="legend-icon">🪜</span> Escalera (sube)</div>
+            <div class="legend-item"><span class="legend-icon">🐍</span> Serpiente (baja)</div>
+            <div class="legend-item"><span class="legend-icon">❓</span> Pregunta</div>
+            <div class="legend-item"><span class="legend-icon">⭐</span> Casilla libre</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- BOARD -->
+      <main class="board-area">
+        <div class="board-container">
+          <div class="board" id="board"></div>
+          <!-- SVG layer for snakes and ladders -->
+          <svg class="board-overlay" id="board-overlay"></svg>
+        </div>
+      </main>
+
+      <!-- DICE & ACTIONS -->
+      <aside class="actions-panel">
+        <div class="dice-area glass-card">
+          <div class="dice" id="dice">
+            <div class="dice-face" id="dice-face">🎲</div>
+          </div>
+          <button class="btn-roll" id="btn-roll">
+            <span class="roll-text">🎲 Tirar Dado</span>
+          </button>
+        </div>
+
+        <div class="game-log glass-card">
+          <h3>📝 Registro</h3>
+          <div class="log-entries" id="log-entries">
+            <div class="log-entry">🎮 ¡Juego iniciado!</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- QUESTION MODAL                          -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="question-modal">
+    <div class="modal glass-card question-modal">
+      <div class="question-header">
+        <span class="question-difficulty" id="question-difficulty">🟢 Básico</span>
+        <span class="question-cell" id="question-cell">Casillero #5</span>
+      </div>
+      <div class="question-body">
+        <p class="question-text" id="question-text">¿Pregunta aquí?</p>
+        <div class="question-hint hidden" id="question-hint">
+          <p class="hint-text" id="hint-text"></p>
+        </div>
+      </div>
+      <div class="question-actions">
+        <button class="btn-hint" id="btn-hint">💡 Pista</button>
+        <div class="validator-section">
+          <p class="validator-label">👨 Papá valida:</p>
+          <div class="validator-buttons">
+            <button class="btn-correct" id="btn-correct">✅ Correcto</button>
+            <button class="btn-incorrect" id="btn-incorrect">❌ Incorrecto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SNAKE/LADDER EVENT MODAL                -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="event-modal">
+    <div class="modal glass-card event-modal">
+      <div class="event-icon" id="event-icon">🪜</div>
+      <h2 class="event-title" id="event-title">¡Escalera!</h2>
+      <p class="event-desc" id="event-desc">Subes del casillero 14 al 29</p>
+      <button class="btn-event-ok" id="btn-event-ok">¡Entendido!</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- WIN MODAL                               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="win-modal">
+    <div class="modal glass-card win-modal">
+      <div class="confetti-container" id="confetti-container"></div>
+      <div class="win-content">
+        <div class="win-trophy">🏆</div>
+        <h2 class="win-title">¡Felicidades!</h2>
+        <p class="win-player" id="win-player-name">Jugador 1</p>
+        <p class="win-subtitle">¡Ha llegado a la meta!</p>
+        <div class="win-stats" id="win-stats"></div>
+        <div class="win-actions">
+          <button class="btn-play-again" id="btn-play-again">🔄 Jugar de nuevo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- RULES MODAL                             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="rules-modal">
+    <div class="modal glass-card rules-modal">
+      <button class="modal-close" id="rules-close">✕</button>
+      <h2>📜 Reglas del Juego</h2>
+      <div class="rules-content">
+        <div class="rule">
+          <span class="rule-num">1</span>
+          <p>Cada jugador tira el dado en su turno.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">2</span>
+          <p>Al caer en una casilla con ❓, aparece una pregunta de poesía.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">3</span>
+          <p>Papá 👨 valida si la respuesta es correcta o no.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">4</span>
+          <p>✅ Correcta → avanza normalmente. ❌ Incorrecta → según la regla elegida.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">5</span>
+          <p>🪜 Escalera → ¡Sube! Responde bien para activarla.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">6</span>
+          <p>🐍 Serpiente → ¡Baja! Solo si responde mal.</p>
+        </div>
+        <div class="rule">
+          <span class="rule-num">7</span>
+          <p>🏆 El primero en llegar a 100 gana.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
