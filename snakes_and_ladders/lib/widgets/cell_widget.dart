@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../data/board_config.dart';
-import '../data/questions_db.dart';
 import '../theme.dart';
 
 class CellWidget extends StatelessWidget {
@@ -15,10 +14,13 @@ class CellWidget extends StatelessWidget {
     this.playerEmojis = const [],
   });
 
+  static Color get _backgroundColor0 => const Color(0xFFFAFAFA);
+  static Color get _backgroundColor1 => const Color(0xFFF5F5F5);
+
   @override
   Widget build(BuildContext context) {
     final cellType = BoardConfig.getCellType(cellNumber);
-    final hasQuestion = QuestionsDatabase.hasQuestion(cellNumber);
+    final hasQuestion = BoardConfig.hasQuestion(cellNumber);
     final isGoal = cellNumber == 100;
     final isStart = cellNumber == 1;
 
@@ -29,23 +31,19 @@ class CellWidget extends StatelessWidget {
       backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.2);
     } else {
       final row = (cellNumber - 1) ~/ BoardConfig.boardSize;
-      backgroundColor = row % 2 == 0
-          ? Colors.grey.shade100
-          : Colors.grey.shade200;
+      backgroundColor = row % 2 == 0 ? _backgroundColor0 : _backgroundColor1;
     }
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+    final borderColor = isHighlighted ? AppTheme.primaryColor : Colors.grey.shade300;
+    final borderWidth = isHighlighted ? 2.0 : 0.5;
+    final fillColor = isHighlighted
+        ? AppTheme.primaryColor.withValues(alpha: 0.3)
+        : backgroundColor;
+
+    return Container(
       decoration: BoxDecoration(
-        color: isHighlighted
-            ? AppTheme.primaryColor.withValues(alpha: 0.3)
-            : backgroundColor,
-        border: Border.all(
-          color: isHighlighted
-              ? AppTheme.primaryColor
-              : Colors.grey.shade300,
-          width: isHighlighted ? 2 : 0.5,
-        ),
+        color: fillColor,
+        border: Border.all(color: borderColor, width: borderWidth),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Stack(
@@ -91,10 +89,7 @@ class CellWidget extends StatelessWidget {
               child: Wrap(
                 alignment: WrapAlignment.center,
                 children: playerEmojis
-                    .map((emoji) => Text(
-                          emoji,
-                          style: const TextStyle(fontSize: 14),
-                        ))
+                    .map((emoji) => const Text(emoji, style: TextStyle(fontSize: 14)))
                     .toList(),
               ),
             ),

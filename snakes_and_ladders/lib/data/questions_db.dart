@@ -5,9 +5,9 @@ import 'natural_science_questions.dart';
 import 'social_science_questions.dart';
 
 class QuestionsDatabase {
-  static List<QuestionEntry> _poetryCache = [];
-  static List<QuestionEntry> _naturalScienceCache = [];
-  static List<QuestionEntry> _socialScienceCache = [];
+  static List<QuestionEntry>? _poetryCache;
+  static List<QuestionEntry>? _naturalScienceCache;
+  static List<QuestionEntry>? _socialScienceCache;
 
   static int get poetryCount => poetryQuestions.length;
   static int get naturalScienceCount => naturalScienceQuestions.length;
@@ -17,20 +17,14 @@ class QuestionsDatabase {
   static List<QuestionEntry> _getCache(QuestionTopic topic) {
     switch (topic) {
       case QuestionTopic.poetry:
-        if (_poetryCache.isEmpty) {
-          _poetryCache = poetryQuestions.toList();
-        }
-        return _poetryCache;
+        _poetryCache ??= [...poetryQuestions];
+        return _poetryCache!;
       case QuestionTopic.naturalSciences:
-        if (_naturalScienceCache.isEmpty) {
-          _naturalScienceCache = naturalScienceQuestions.toList();
-        }
-        return _naturalScienceCache;
+        _naturalScienceCache ??= [...naturalScienceQuestions];
+        return _naturalScienceCache!;
       case QuestionTopic.socialSciences:
-        if (_socialScienceCache.isEmpty) {
-          _socialScienceCache = socialScienceQuestions.toList();
-        }
-        return _socialScienceCache;
+        _socialScienceCache ??= [...socialScienceQuestions];
+        return _socialScienceCache!;
     }
   }
 

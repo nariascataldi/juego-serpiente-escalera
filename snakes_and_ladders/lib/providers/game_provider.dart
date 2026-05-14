@@ -34,6 +34,7 @@ class GameProvider extends ChangeNotifier {
   int _diceValue = 0;
   int _turnCount = 0;
   int? _highlightedCell;
+  final ValueNotifier<int?> highlightedCellNotifier = ValueNotifier<int?>(null);
   QuestionModel? _currentQuestion;
   int? _currentQuestionCell;
   bool _isSpecialQuestion = false;
@@ -49,7 +50,7 @@ class GameProvider extends ChangeNotifier {
   int get diceValue => _diceValue;
   int get turnCount => _turnCount;
   int? get highlightedCell => _highlightedCell;
-  Question? get currentQuestion => _currentQuestion;
+  QuestionModel? get currentQuestion => _currentQuestion;
   int? get currentQuestionCell => _currentQuestionCell;
   bool get isSpecialQuestion => _isSpecialQuestion;
   Player? get winner => _winner;
@@ -119,6 +120,7 @@ class GameProvider extends ChangeNotifier {
     _diceValue = 0;
     _turnCount = 0;
     _highlightedCell = null;
+    highlightedCellNotifier.value = null;
     _currentQuestion = null;
     _currentQuestionCell = null;
     _isSpecialQuestion = false;
@@ -204,22 +206,22 @@ class GameProvider extends ChangeNotifier {
     for (var pos = start; pos != toPos; pos += direction) {
       player.position = pos;
       _highlightedCell = pos;
-      notifyListeners();
+      highlightedCellNotifier.value = pos;
       await Future.delayed(const Duration(milliseconds: 150));
     }
 
     player.position = toPos;
     _highlightedCell = toPos;
-    notifyListeners();
+    highlightedCellNotifier.value = toPos;
 
     await Future.delayed(const Duration(milliseconds: 300));
     _highlightedCell = null;
-    notifyListeners();
+    highlightedCellNotifier.value = null;
   }
 
   void _handleCellEvent(Player player, int cellNum) {
     final cellType = BoardConfig.getCellType(cellNum);
-    final hasQuestion = QuestionsDatabase.hasQuestion(cellNum);
+    final hasQuestion = BoardConfig.hasQuestion(cellNum);
 
     if (cellType == CellType.ladder) {
       _pendingEvent = PendingEvent(
@@ -247,10 +249,10 @@ class GameProvider extends ChangeNotifier {
   void _showQuestion(Player player, int cellNum, bool isSpecial) {
     _isSpecialQuestion = isSpecial;
     _currentQuestionCell = cellNum;
-      _currentQuestion = QuestionsDatabase.getQuestionForCell(
-        cellNum,
-        _config.topic,
-      );
+    _currentQuestion = QuestionsDatabase.getQuestionForCell(
+      cellNum,
+      _config.topic,
+    );
     _gameState = GameState.answering;
     notifyListeners();
   }
