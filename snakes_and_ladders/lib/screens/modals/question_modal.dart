@@ -25,10 +25,6 @@ class _QuestionModalState extends State<QuestionModal> {
 
         final question = game.currentQuestion!;
         final cellNumber = game.currentQuestionCell ?? 0;
-        final level = QuestionLevel.values.firstWhere(
-          (l) => l.name == question.level,
-          orElse: () => QuestionLevel.medium,
-        );
 
         return Container(
           color: Colors.black54,
@@ -43,24 +39,21 @@ class _QuestionModalState extends State<QuestionModal> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                      if (question.category.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.purple.shade100,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '📚 ${question.category}',
+                            style: const TextStyle(fontSize: 14),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: level == QuestionLevel.easy
-                              ? Colors.green.shade100
-                              : level == QuestionLevel.medium
-                                  ? Colors.yellow.shade100
-                                  : Colors.red.shade100,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          '${level.emoji} ${level.displayName}',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
                       const Spacer(),
                       Text(
                         'Casillero #$cellNumber',

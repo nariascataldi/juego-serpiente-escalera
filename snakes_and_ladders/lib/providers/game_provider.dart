@@ -34,7 +34,7 @@ class GameProvider extends ChangeNotifier {
   int _diceValue = 0;
   int _turnCount = 0;
   int? _highlightedCell;
-  Question? _currentQuestion;
+  QuestionModel? _currentQuestion;
   int? _currentQuestionCell;
   bool _isSpecialQuestion = false;
   PendingEvent? _pendingEvent;
@@ -100,7 +100,6 @@ class GameProvider extends ChangeNotifier {
     _turnCount = 0;
     _logs.clear();
     _logs.add(GameLog('🎮 ¡El juego ha comenzado!'));
-    _logs.add(GameLog('📊 Dificultad: ${_config.difficulty.displayName}'));
 
     for (var player in _players) {
       player.position = 0;
@@ -248,11 +247,10 @@ class GameProvider extends ChangeNotifier {
   void _showQuestion(Player player, int cellNum, bool isSpecial) {
     _isSpecialQuestion = isSpecial;
     _currentQuestionCell = cellNum;
-    _currentQuestion = QuestionsDatabase.getQuestionForCell(
-      cellNum,
-      _config.topic,
-      _config.difficulty,
-    );
+      _currentQuestion = QuestionsDatabase.getQuestionForCell(
+        cellNum,
+        _config.topic,
+      );
     _gameState = GameState.answering;
     notifyListeners();
   }

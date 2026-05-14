@@ -51,8 +51,6 @@ class _StartScreenState extends State<StartScreen> {
                 const SizedBox(height: 24),
                 _buildTopicSection(context),
                 const SizedBox(height: 24),
-                _buildDifficultySection(context),
-                const SizedBox(height: 24),
                 _buildWrongRuleSection(context),
                 const SizedBox(height: 32),
                 _buildStartButton(context),
@@ -235,51 +233,6 @@ class _StartScreenState extends State<StartScreen> {
                   if (selected) {
                     game.updateConfig(
                       game.config.copyWith(topic: topic),
-                    );
-                  }
-                },
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDifficultySection(BuildContext context) {
-    final game = context.watch<GameProvider>();
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.glassCard,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Text('📊 ', style: TextStyle(fontSize: 20)),
-              Text(
-                'Dificultad',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: QuestionLevel.values.map((level) {
-              final isSelected = game.config.difficulty == level;
-              return ChoiceChip(
-                label: Text('${level.emoji} ${level.displayName}'),
-                selected: isSelected,
-                onSelected: (selected) {
-                  if (selected) {
-                    game.updateConfig(
-                      game.config.copyWith(difficulty: level),
                     );
                   }
                 },

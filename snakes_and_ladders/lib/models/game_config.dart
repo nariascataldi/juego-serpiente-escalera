@@ -28,23 +28,19 @@ extension WrongRuleExtension on WrongRule {
 
 class GameConfig {
   final QuestionTopic topic;
-  final QuestionLevel difficulty;
   final WrongRule wrongRule;
 
   const GameConfig({
     this.topic = QuestionTopic.naturalSciences,
-    this.difficulty = QuestionLevel.medium,
     this.wrongRule = WrongRule.stay,
   });
 
   GameConfig copyWith({
     QuestionTopic? topic,
-    QuestionLevel? difficulty,
     WrongRule? wrongRule,
   }) {
     return GameConfig(
       topic: topic ?? this.topic,
-      difficulty: difficulty ?? this.difficulty,
       wrongRule: wrongRule ?? this.wrongRule,
     );
   }
