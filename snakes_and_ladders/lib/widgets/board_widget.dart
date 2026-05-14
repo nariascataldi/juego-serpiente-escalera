@@ -13,18 +13,25 @@ class BoardWidget extends StatefulWidget {
 
 class _BoardWidgetState extends State<BoardWidget> {
   Map<int, List<String>> _playerEmojisByCell = {};
+  int? _lastHighlightedCell;
 
   void _updatePlayerEmojis(GameProvider game) {
-    final newMap = <int, List<String>>{};
-    for (final player in game.players) {
-      newMap.putIfAbsent(player.position, () => []).add(player.emoji);
+    final needsUpdate = _lastHighlightedCell != game.highlightedCell;
+
+    if (needsUpdate || _playerEmojisByCell.isEmpty) {
+      final newMap = <int, List<String>>{};
+      for (final player in game.players) {
+        newMap.putIfAbsent(player.position, () => []).add(player.emoji);
+      }
+      _playerEmojisByCell = newMap;
+      _lastHighlightedCell = game.highlightedCell;
     }
-    _playerEmojisByCell = newMap;
   }
 
   @override
   Widget build(BuildContext context) {
     final game = context.watch<GameProvider>();
+    _updatePlayerEmojis(game);
 
     return AspectRatio(
       aspectRatio: 1,
@@ -32,34 +39,26 @@ class _BoardWidgetState extends State<BoardWidget> {
         builder: (context, constraints) {
           return Stack(
             children: [
-              RepaintBoundary(
-                child: CustomPaint(
-                  size: Size(constraints.maxWidth, constraints.maxHeight),
-                  painter: SnakesAndLaddersPainter(),
-                ),
+              CustomPaint(
+                size: Size(constraints.maxWidth, constraints.maxHeight),
+                painter: SnakesAndLaddersPainter(),
               ),
-              ValueListenableBuilder<int?>(
-                valueListenable: game.highlightedCellNotifier,
-                builder: (context, highlightedCell, child) {
-                  _updatePlayerEmojis(game);
-                  return GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: BoardConfig.boardSize,
-                    ),
-                    itemCount: BoardConfig.totalCells,
-                    itemBuilder: (context, index) {
-                      final row = index ~/ BoardConfig.boardSize;
-                      final col = index % BoardConfig.boardSize;
-                      final cellNumber = BoardConfig.getCellNumber(row, col);
+              GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: BoardConfig.boardSize,
+                ),
+                itemCount: BoardConfig.totalCells,
+                itemBuilder: (context, index) {
+                  final row = index ~/ BoardConfig.boardSize;
+                  final col = index % BoardConfig.boardSize;
+                  final cellNumber = BoardConfig.getCellNumber(row, col);
 
-                      return CellWidget(
-                        key: ValueKey(cellNumber),
-                        cellNumber: cellNumber,
-                        isHighlighted: highlightedCell == cellNumber,
-                        playerEmojis: _playerEmojisByCell[cellNumber] ?? const [],
-                      );
-                    },
+                  return CellWidget(
+                    key: ValueKey(cellNumber),
+                    cellNumber: cellNumber,
+                    isHighlighted: game.highlightedCell == cellNumber,
+                    playerEmojis: _playerEmojisByCell[cellNumber] ?? const [],
                   );
                 },
               ),

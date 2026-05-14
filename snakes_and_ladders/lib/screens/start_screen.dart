@@ -33,10 +33,7 @@ class _StartScreenState extends State<StartScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF6366F1),
-              Color(0xFF8B5CF6),
-            ],
+            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
           ),
         ),
         child: SafeArea(
@@ -66,10 +63,7 @@ class _StartScreenState extends State<StartScreen> {
   Widget _buildTitle() {
     return Column(
       children: [
-        const Text(
-          '🎲',
-          style: TextStyle(fontSize: 60),
-        ),
+        const Text('🎲', style: TextStyle(fontSize: 60)),
         const SizedBox(height: 8),
         const Text(
           'Serpientes',
@@ -90,10 +84,7 @@ class _StartScreenState extends State<StartScreen> {
         const SizedBox(height: 8),
         const Text(
           '🧠 Aprendizaje Multitemático',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white70,
-          ),
+          style: TextStyle(fontSize: 16, color: Colors.white70),
         ),
       ],
     );
@@ -114,18 +105,12 @@ class _StartScreenState extends State<StartScreen> {
               Text('👨‍👧‍👦 ', style: TextStyle(fontSize: 20)),
               Text(
                 '¿Quién juega?',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          ...List.generate(
-            playerCount,
-            (index) => _buildPlayerInput(index),
-          ),
+          ...List.generate(playerCount, (index) => _buildPlayerInput(index)),
           if (playerCount < 4)
             TextButton.icon(
               onPressed: () {
@@ -159,10 +144,7 @@ class _StartScreenState extends State<StartScreen> {
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: Text(
-                emojis[index],
-                style: const TextStyle(fontSize: 14),
-              ),
+              child: Text(emojis[index], style: const TextStyle(fontSize: 14)),
             ),
           ),
           const SizedBox(width: 12),
@@ -178,7 +160,9 @@ class _StartScreenState extends State<StartScreen> {
                 if (index < players.length) {
                   final player = players[index];
                   game.removePlayer(index);
-                  game.addPlayer(value.isEmpty ? 'Jugador ${index + 1}' : value);
+                  game.addPlayer(
+                    value.isEmpty ? 'Jugador ${index + 1}' : value,
+                  );
                 }
               },
             ),
@@ -213,10 +197,7 @@ class _StartScreenState extends State<StartScreen> {
               Text('📚 ', style: TextStyle(fontSize: 20)),
               Text(
                 'Tema del Cuestionario',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -226,14 +207,14 @@ class _StartScreenState extends State<StartScreen> {
             runSpacing: 12,
             children: QuestionTopic.values.map((topic) {
               final isSelected = game.config.topic == topic;
+              final emoji = topic.emoji;
+              final label = topic.displayName;
               return ChoiceChip(
-                label: Text('${topic.emoji} ${topic.displayName}'),
+                label: Text('$emoji $label'),
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    game.updateConfig(
-                      game.config.copyWith(topic: topic),
-                    );
+                    game.updateConfig(game.config.copyWith(topic: topic));
                   }
                 },
               );
@@ -258,10 +239,7 @@ class _StartScreenState extends State<StartScreen> {
               Text('❌ ', style: TextStyle(fontSize: 20)),
               Text(
                 'Si responde mal...',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -271,14 +249,14 @@ class _StartScreenState extends State<StartScreen> {
             runSpacing: 12,
             children: WrongRule.values.map((rule) {
               final isSelected = game.config.wrongRule == rule;
+              final emoji = rule.emoji;
+              final label = rule.displayName;
               return ChoiceChip(
-                label: Text('${rule.emoji} ${rule.displayName}'),
+                label: Text('$emoji $label'),
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    game.updateConfig(
-                      game.config.copyWith(wrongRule: rule),
-                    );
+                    game.updateConfig(game.config.copyWith(wrongRule: rule));
                   }
                 },
               );
@@ -300,17 +278,11 @@ class _StartScreenState extends State<StartScreen> {
           backgroundColor: const Color(0xFF10B981),
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          textStyle: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('🎮 '),
-            Text('¡Comenzar Juego!'),
-          ],
+          children: [Text('🎮 '), Text('¡Comenzar Juego!')],
         ),
       ),
     );
