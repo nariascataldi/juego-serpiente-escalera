@@ -34,7 +34,9 @@ class CellWidget extends StatelessWidget {
       backgroundColor = row % 2 == 0 ? _backgroundColor0 : _backgroundColor1;
     }
 
-    final borderColor = isHighlighted ? AppTheme.primaryColor : Colors.grey.shade300;
+    final borderColor = isHighlighted
+        ? AppTheme.primaryColor
+        : Colors.grey.shade300;
     final borderWidth = isHighlighted ? 2.0 : 0.5;
     final fillColor = isHighlighted
         ? AppTheme.primaryColor.withValues(alpha: 0.3)
@@ -89,7 +91,7 @@ class CellWidget extends StatelessWidget {
               child: Wrap(
                 alignment: WrapAlignment.center,
                 children: playerEmojis
-                    .map((emoji) => const Text(emoji, style: TextStyle(fontSize: 14)))
+                    .map((emoji) => Text(emoji, style: TextStyle(fontSize: 14)))
                     .toList(),
               ),
             ),
