@@ -25,6 +25,20 @@ class GameLog {
   GameLog(this.message) : timestamp = DateTime.now();
 }
 
+class AnimatedPlayerPosition {
+  final int playerId;
+  final int fromCell;
+  final int toCell;
+  final double progress;
+
+  AnimatedPlayerPosition({
+    required this.playerId,
+    required this.fromCell,
+    required this.toCell,
+    this.progress = 0.0,
+  });
+}
+
 class GameProvider extends ChangeNotifier {
   List<Player> _players = [];
   int _currentPlayerIndex = 0;
@@ -35,6 +49,8 @@ class GameProvider extends ChangeNotifier {
   int _turnCount = 0;
   int? _highlightedCell;
   final ValueNotifier<int?> highlightedCellNotifier = ValueNotifier<int?>(null);
+  final ValueNotifier<AnimatedPlayerPosition?> animatedPositionNotifier =
+      ValueNotifier<AnimatedPlayerPosition?>(null);
   QuestionModel? _currentQuestion;
   int? _currentQuestionCell;
   bool _isSpecialQuestion = false;
@@ -211,21 +227,77 @@ class GameProvider extends ChangeNotifier {
   Future<void> _animateMovement(Player player, int fromPos, int toPos) async {
     final start = max(1, fromPos);
     final direction = toPos > start ? 1 : -1;
+    final totalSteps = (toPos - start).abs();
 
-    for (var pos = start; pos != toPos; pos += direction) {
+    for (var step = 0; step < totalSteps; step++) {
+      final pos = start + (direction * step);
       player.position = pos;
       _highlightedCell = pos;
       highlightedCellNotifier.value = pos;
-      await Future.delayed(const Duration(milliseconds: 150));
+
+      animatedPositionNotifier.value = AnimatedPlayerPosition(
+        playerId: player.id,
+        fromCell: fromPos,
+        toCell: toPos,
+        progress: (step + 1) / totalSteps,
+      );
+
+      await _smoothDelay(step, totalSteps);
     }
 
     player.position = toPos;
     _highlightedCell = toPos;
     highlightedCellNotifier.value = toPos;
 
-    await Future.delayed(const Duration(milliseconds: 300));
+    animatedPositionNotifier.value = AnimatedPlayerPosition(
+      playerId: player.id,
+      fromCell: toPos,
+      toCell: toPos,
+      progress: 1.0,
+    );
+
+    triggerBounceEffect(player.id);
+    await Future.delayed(const Duration(milliseconds: 500));
     _highlightedCell = null;
     highlightedCellNotifier.value = null;
+    animatedPositionNotifier.value = null;
+  }
+
+  Future<void> _smoothDelay(int currentStep, int totalSteps) async {
+    final progress = (currentStep + 1) / totalSteps;
+    final easeProgress = _easeInOut(progress);
+    final baseDelay = 180;
+    final adjustedDelay = (baseDelay * (1 - easeProgress * 0.4)).toInt();
+    await Future.delayed(Duration(milliseconds: adjustedDelay.clamp(80, 180)));
+  }
+
+  double _easeInOut(double t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  void triggerBounceEffect(int playerId) {
+    animatedPositionNotifier.value = AnimatedPlayerPosition(
+      playerId: playerId,
+      fromCell: 0,
+      toCell: 0,
+      progress: 1.4,
+    );
+    Future.delayed(const Duration(milliseconds: 150), () {
+      animatedPositionNotifier.value = AnimatedPlayerPosition(
+        playerId: playerId,
+        fromCell: 0,
+        toCell: 0,
+        progress: 1.1,
+      );
+    });
+    Future.delayed(const Duration(milliseconds: 300), () {
+      animatedPositionNotifier.value = AnimatedPlayerPosition(
+        playerId: playerId,
+        fromCell: 0,
+        toCell: 0,
+        progress: 1.0,
+      );
+    });
   }
 
   void _handleCellEvent(Player player, int cellNum) {

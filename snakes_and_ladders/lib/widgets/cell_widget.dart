@@ -17,37 +17,105 @@ class CellWidget extends StatelessWidget {
   static Color get _backgroundColor0 => const Color(0xFFFAFAFA);
   static Color get _backgroundColor1 => const Color(0xFFF5F5F5);
 
+  Color get _cellBackgroundColor {
+    if (cellNumber == 100) {
+      return const Color(0xFFFBBF24).withValues(alpha: 0.4);
+    }
+    if (cellNumber == 1) {
+      return const Color(0xFF10B981).withValues(alpha: 0.25);
+    }
+
+    final cellType = BoardConfig.getCellType(cellNumber);
+    final hasQuestion = BoardConfig.hasQuestion(cellNumber);
+
+    if (cellType == CellType.question || hasQuestion) {
+      return const Color(0xFFE0F2FE);
+    }
+    if (cellType == CellType.ladder) {
+      return const Color(0xFFD1FAE5);
+    }
+    if (cellType == CellType.snake) {
+      return const Color(0xFFFEE2E2);
+    }
+
+    final row = (cellNumber - 1) ~/ BoardConfig.boardSize;
+    return row % 2 == 0 ? _backgroundColor0 : _backgroundColor1;
+  }
+
+  BoxDecoration get _cellDecoration {
+    final isGoal = cellNumber == 100;
+    final cellType = BoardConfig.getCellType(cellNumber);
+    final hasQuestion = BoardConfig.hasQuestion(cellNumber);
+    final isSpecialCell =
+        cellType != CellType.normal &&
+        !hasQuestion &&
+        cellNumber != 1 &&
+        cellNumber != 100;
+
+    Color backgroundColor;
+    List<BoxShadow>? boxShadow;
+
+    if (isHighlighted) {
+      backgroundColor = AppTheme.primaryColor.withValues(alpha: 0.35);
+      boxShadow = [
+        BoxShadow(
+          color: AppTheme.primaryColor.withValues(alpha: 0.4),
+          blurRadius: 8,
+          spreadRadius: 1,
+        ),
+      ];
+    } else {
+      backgroundColor = _cellBackgroundColor;
+      if (isGoal) {
+        boxShadow = [
+          BoxShadow(
+            color: const Color(0xFFFBBF24).withValues(alpha: 0.3),
+            blurRadius: 6,
+            spreadRadius: 1,
+          ),
+        ];
+      } else if (isSpecialCell) {
+        boxShadow = [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 3,
+            spreadRadius: 0.5,
+          ),
+        ];
+      }
+    }
+
+    return BoxDecoration(
+      gradient: isGoal
+          ? const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFFBBF24), Color(0xFFF59E0B)],
+            )
+          : null,
+      color: isGoal ? null : backgroundColor,
+      border: Border.all(
+        color: isHighlighted
+            ? AppTheme.primaryColor
+            : (isGoal
+                  ? const Color(0xFFD97706)
+                  : (isSpecialCell
+                        ? Colors.grey.shade400
+                        : Colors.grey.shade300)),
+        width: isHighlighted ? 2.0 : (isGoal ? 1.5 : 0.8),
+      ),
+      borderRadius: BorderRadius.circular(6),
+      boxShadow: boxShadow,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cellType = BoardConfig.getCellType(cellNumber);
-    final hasQuestion = BoardConfig.hasQuestion(cellNumber);
     final isGoal = cellNumber == 100;
-    final isStart = cellNumber == 1;
-
-    Color backgroundColor;
-    if (isGoal) {
-      backgroundColor = const Color(0xFFFBBF24).withValues(alpha: 0.3);
-    } else if (isStart) {
-      backgroundColor = const Color(0xFF10B981).withValues(alpha: 0.2);
-    } else {
-      final row = (cellNumber - 1) ~/ BoardConfig.boardSize;
-      backgroundColor = row % 2 == 0 ? _backgroundColor0 : _backgroundColor1;
-    }
-
-    final borderColor = isHighlighted
-        ? AppTheme.primaryColor
-        : Colors.grey.shade300;
-    final borderWidth = isHighlighted ? 2.0 : 0.5;
-    final fillColor = isHighlighted
-        ? AppTheme.primaryColor.withValues(alpha: 0.3)
-        : backgroundColor;
 
     return Container(
-      decoration: BoxDecoration(
-        color: fillColor,
-        border: Border.all(color: borderColor, width: borderWidth),
-        borderRadius: BorderRadius.circular(4),
-      ),
+      decoration: _cellDecoration,
       child: Stack(
         children: [
           Positioned(
@@ -74,7 +142,7 @@ class CellWidget extends StatelessWidget {
               right: 2,
               child: Text('🐍', style: TextStyle(fontSize: 12)),
             ),
-          if (hasQuestion && cellType == CellType.normal)
+          if (cellType == CellType.question)
             const Positioned(
               top: 2,
               right: 2,
