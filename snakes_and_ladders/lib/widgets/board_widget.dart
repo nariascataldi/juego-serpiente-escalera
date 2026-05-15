@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/game_provider.dart';
@@ -108,7 +109,7 @@ class SnakesAndLaddersPainter extends CustomPainter {
       );
 
       final dist = ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-      final numRungs = (dist / (cellSize * 0.5)).sqrt().toInt().clamp(3, 8);
+      final numRungs = math.sqrt(dist / (cellSize * 0.5)).toInt().clamp(3, 8);
       for (var i = 1; i < numRungs; i++) {
         final t = i / numRungs;
         final rx = x1 + (x2 - x1) * t;
@@ -148,12 +149,4 @@ class SnakesAndLaddersPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-extension on double {
-  double sqrt() => this > 0 ? this.toDouble().sqrt() : 0;
-}
-
-extension on int {
-  double sqrt() => this.toDouble().sqrt();
 }

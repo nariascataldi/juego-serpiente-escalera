@@ -27,9 +27,50 @@ class BoardConfig {
   };
 
   static const Set<int> _questionCells = {
-    2, 3, 5, 7, 8, 10, 12, 15, 16, 18, 20, 22, 23, 25, 27, 30,
-    33, 35, 37, 40, 42, 45, 48, 50, 52, 55, 57, 60, 62, 65, 68,
-    70, 72, 75, 77, 80, 82, 85, 88, 90, 92, 95, 97, 98,
+    2,
+    3,
+    5,
+    7,
+    8,
+    10,
+    12,
+    15,
+    16,
+    18,
+    20,
+    22,
+    23,
+    25,
+    27,
+    30,
+    33,
+    35,
+    37,
+    40,
+    42,
+    45,
+    48,
+    50,
+    52,
+    55,
+    57,
+    60,
+    62,
+    65,
+    68,
+    70,
+    72,
+    75,
+    77,
+    80,
+    82,
+    85,
+    88,
+    90,
+    92,
+    95,
+    97,
+    98,
   };
 
   static const Map<int, CellType> _cellTypes = {
@@ -43,9 +84,9 @@ class BoardConfig {
     8: CellType.question,
     9: CellType.ladder,
     10: CellType.question,
-    11: CellType.normal,
+    11: CellType.question,
     12: CellType.question,
-    13: CellType.normal,
+    13: CellType.question,
     14: CellType.normal,
     15: CellType.question,
     16: CellType.question,
@@ -137,7 +178,8 @@ class BoardConfig {
 
   static bool isLadder(int cellNumber) => ladders.containsKey(cellNumber);
   static bool isSnake(int cellNumber) => snakes.containsKey(cellNumber);
-  static bool hasQuestion(int cellNumber) => _questionCells.contains(cellNumber);
+  static bool hasQuestion(int cellNumber) =>
+      _questionCells.contains(cellNumber);
 
   static int? getLadderDestination(int cellNumber) => ladders[cellNumber];
   static int? getSnakeDestination(int cellNumber) => snakes[cellNumber];
@@ -151,7 +193,8 @@ class BoardConfig {
     return cellNumber;
   }
 
-  static CellType getCellType(int cellNumber) => _cellTypes[cellNumber] ?? CellType.normal;
+  static CellType getCellType(int cellNumber) =>
+      _cellTypes[cellNumber] ?? CellType.normal;
 
   static int getCellNumber(int row, int col) {
     final actualRow = boardSize - 1 - row;

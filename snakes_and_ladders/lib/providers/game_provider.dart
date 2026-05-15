@@ -68,12 +68,14 @@ class GameProvider extends ChangeNotifier {
     if (_players.length < 4) {
       final colors = ['player1', 'player2', 'player3', 'player4'];
       final emojis = ['🔵', '🔴', '🟢', '🟡'];
-      _players.add(Player(
-        id: _players.length + 1,
-        name: name.isEmpty ? 'Jugador ${_players.length + 1}' : name,
-        color: colors[_players.length],
-        emoji: emojis[_players.length],
-      ));
+      _players.add(
+        Player(
+          id: _players.length + 1,
+          name: name.isEmpty ? 'Jugador ${_players.length + 1}' : name,
+          color: colors[_players.length],
+          emoji: emojis[_players.length],
+        ),
+      );
       notifyListeners();
     }
   }
@@ -91,26 +93,31 @@ class GameProvider extends ChangeNotifier {
   }
 
   void startGame() {
-    if (_players.isEmpty) {
-      addPlayer('Jugador 1');
+    try {
+      if (_players.isEmpty) {
+        addPlayer('Jugador 1');
+      }
+
+      _currentScreen = GameScreen.game;
+      _gameState = GameState.idle;
+      _currentPlayerIndex = 0;
+      _turnCount = 0;
+      _logs.clear();
+      _logs.add(GameLog('🎮 ¡El juego ha comenzado!'));
+
+      for (var player in _players) {
+        player.position = 0;
+        player.correctAnswers = 0;
+        player.wrongAnswers = 0;
+        player.turnsPlayed = 0;
+        player.skipNextTurn = false;
+      }
+
+      notifyListeners();
+    } catch (e, stack) {
+      print('ERROR in startGame: $e');
+      print('STACK: $stack');
     }
-
-    _currentScreen = GameScreen.game;
-    _gameState = GameState.idle;
-    _currentPlayerIndex = 0;
-    _turnCount = 0;
-    _logs.clear();
-    _logs.add(GameLog('🎮 ¡El juego ha comenzado!'));
-
-    for (var player in _players) {
-      player.position = 0;
-      player.correctAnswers = 0;
-      player.wrongAnswers = 0;
-      player.turnsPlayed = 0;
-      player.skipNextTurn = false;
-    }
-
-    notifyListeners();
   }
 
   void restartGame() {
@@ -176,7 +183,9 @@ class GameProvider extends ChangeNotifier {
     var newPos = oldPos == 0 ? _diceValue : oldPos + _diceValue;
 
     if (newPos > 100) {
-      addLog('📍 ${player.name} necesita exacto para llegar a 100. Se queda en $oldPos.');
+      addLog(
+        '📍 ${player.name} necesita exacto para llegar a 100. Se queda en $oldPos.',
+      );
       _gameState = GameState.idle;
       _nextTurn();
       notifyListeners();
